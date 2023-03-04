@@ -1,2 +1,1 @@
-# helloWorld
-Testing repository
+# inspiringMinds
