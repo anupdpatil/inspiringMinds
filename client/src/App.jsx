@@ -57,11 +57,28 @@ export default function App() {
           body: JSON.stringify(form),
         },
       );
-      const result = await response.json();
-      if (!response.ok)
+      const responseBody = await response.text();
+      let result;
+      if (responseBody) {
+        try {
+          result = JSON.parse(responseBody);
+        } catch {
+          if (response.ok) {
+            throw new Error("The server returned an invalid response. Please try again later.");
+          }
+        }
+      }
+      if (!response.ok) {
         throw new Error(
-          result.message || "Unable to submit your enquiry right now.",
+          result?.message ||
+            (response.status === 404
+              ? "The enquiry API was not found. Check the deployed API URL."
+              : `Unable to submit your enquiry (HTTP ${response.status}). Please try again later.`),
         );
+      }
+      if (!result || typeof result !== "object" || Array.isArray(result)) {
+        throw new Error("The server returned an empty or invalid response. Please try again later.");
+      }
       setStatus({
         type: result.notificationSent === false ? "warning" : "success",
         message: result.notificationSent === false
