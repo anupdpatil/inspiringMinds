@@ -50,7 +50,8 @@ export default function App() {
     setStatus({ type: "", message: "" });
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || ""}/api/enquiries`,
+        // `${import.meta.env.VITE_API_URL || ""}/api/enquiries`,
+        `https://inspiringminds-backend.onrender.com/api/enquiries`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
